@@ -1,26 +1,43 @@
 #include <iostream>
+#include <vector>
 using namespace std;
 
 int main() {
-     int n;
-     int q;
-     int x[q];
-     int min = 0;
-     int ans[q];
-     cin >> n >> q;
-     for (int i = 0; i < q; i++) {
-        cin >> x[i];
-        if (x[i] >= 1) {
-            ans[i] = x[i];
+    int n, q;
+    cin >> n >> q;
+
+    vector<int> box_counts(n + 1, 0);  // 箱のボール数（1-indexed）
+    vector<int> result;                // 出力用：どの箱に入れたか
+
+    for (int i = 0; i < q; i++) {
+        int x;
+        cin >> x;
+
+        if (x >= 1) {
+            box_counts[x]++;
+            result.push_back(x);
         } else {
-            if (ans[i] > ans[i + 1]) {
-                min = i + 1;
+            // ボール数最小の箱を探す
+            int min_count = box_counts[1];
+            int min_box = 1;
+
+            for (int j = 2; j <= n; j++) {
+                if (box_counts[j] < min_count) {
+                    min_count = box_counts[j];
+                    min_box = j;
+                }
             }
-            ans[i] = min;
+
+            box_counts[min_box]++;
+            result.push_back(min_box);
         }
-     }
-     for (int k = 0; k < q; k++) {
-        cout << ans[k] << ' ';
-     }
+    }
+
+    // 出力
+    for (int v : result) {
+        cout << v << ' ';
+    }
+    cout << endl;
+
     return 0;
 }
